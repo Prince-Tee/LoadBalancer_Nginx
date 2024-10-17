@@ -1,0 +1,106 @@
+Rename apache web browser to Nginx LB on aws
+
+ssh into it from gitbash
+
+To uninstall Apache from an existing Load Balancer server, follow these steps:
+
+To uninstall Apache from an existing Load Balancer server, follow these steps:
+
+### For Ubuntu/systems:
+
+1. **SSH into the Load Balancer server:**
+   Open a terminal and use SSH to connect to your server.
+   ```bash
+   ssh username@your-server-ip
+   ```
+
+2. **Stop the Apache service:**
+   First, stop the Apache service to ensure no issues during uninstallation.
+   ```bash
+   sudo systemctl stop apache2
+   ```
+
+3. **Uninstall Apache:**
+   Remove the Apache package.
+   ```bash
+   sudo apt-get purge apache2 apache2-utils apache2-bin apache2.2-common
+   ```
+
+4. **Remove unused dependencies:**
+   Clean up any dependencies that are no longer needed.
+   ```bash
+   sudo apt-get autoremove
+   ```
+
+5. **Check for Apache files:**
+   To ensure that no residual Apache files are left, check the directories where Apache configuration files are typically stored.
+   ```bash
+   sudo rm -rf /etc/apache2
+   sudo rm -rf /var/www/html
+   ```
+
+6. **Verify Apache removal:**
+   Check that Apache has been completely removed.
+   ```bash
+   apache2 -v
+   ```
+   If Apache is fully removed, you should see an error or "command not found."
+
+
+ open TCP port 80 for HTTP connections, also open TCP port 443 - this port is used for secured HTTPS connections)
+
+
+Open the /etc/hosts file: Use a text editor like nano or vi to open the /etc/hosts file for editing. You need root privileges to modify this file.
+
+```bash
+sudo vi /etc/hosts
+```
+
+Add entries for Web1 and Web2: In the /etc/hosts file, add the local IP addresses of your web servers and their corresponding names. The format is:
+
+```plaintext
+
+<IP_address>   <hostname>
+```
+
+Install and configure Nginx as a load balancer to point traffic to the resolvable DNS names of the webservers
+Update the instance and Install Nginx Install Nginx
+
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+Open the default nginx configuration file
+
+```bash
+sudo vi /etc/nginx/nginx.conf
+```
+
+#insert following configuration into http section
+```
+ upstream myproject {
+    server Web1 weight=5;
+    server Web2 weight=5;
+  }
+
+server {
+    listen 80;
+    server_name www.domain.com;
+    location / {
+      proxy_pass http://myproject;
+    }
+  }
+```
+
+and comment out this line comment out this line
+```
+#       include /etc/nginx/sites-enabled/*;
+```
+
+Restart Nginx and make sure the service is up and running
+
+```
+sudo systemctl restart nginx
+sudo systemctl status nginx
+```
