@@ -147,9 +147,14 @@ Add entries for Web1 and Web2: In the /etc/hosts file, add the local IP addresse
 
 1. **Allocate Elastic IP:**
    - In the AWS EC2 dashboard, click on **Elastic IPs**.
+
+   ![screenshot](https://github.com/Prince-Tee/LoadBalancer_Nginx/blob/main/screenshot%20from%20my%20local%20env/creating%20elastic%20ip%20for%20our%20subdomain%20nginx.PNG)
+
    - Allocate an IP and associate it with your Nginx Load Balancer server.
 
-    _Screenshot placeholder for Elastic IP allocation_
+   ![ _Screenshot placeholder for Elastic IP allocation_](https://github.com/Prince-Tee/LoadBalancer_Nginx/blob/main/screenshot%20from%20my%20local%20env/associate%20elastic%20ip%20to%20the%20nginx%20instance.PNG)
+
+   ![screenshot](https://github.com/Prince-Tee/LoadBalancer_Nginx/blob/main/screenshot%20from%20my%20local%20env/associate%20elastic%20ip%20to%20the%20nginx%20instance2.PNG)
 
 2. **Point FreeDNS subdomain to your Elastic IP:**
    - Go to the DNS section in FreeDNS and add an **A Record** that points to your Elastic IP.
